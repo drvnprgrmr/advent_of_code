@@ -1,1 +1,4 @@
 venv/
+
+# Don't track text files as they can get quite heavy
+*.txt
