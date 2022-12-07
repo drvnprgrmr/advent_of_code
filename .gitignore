@@ -1,4 +1,8 @@
 venv/
+.vscode/
+__pycache__/
 
 # Don't track text files as they can get quite heavy
 *.txt
+
+!requirements.txt
