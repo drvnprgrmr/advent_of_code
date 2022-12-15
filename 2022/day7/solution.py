@@ -1,7 +1,5 @@
 from aocd.models import Puzzle
 
-
-from pprint import pprint
 from os import path
 
 
@@ -31,6 +29,8 @@ def load_example_data():
 
 
 def solve_a(data=None):
+    # PS: I feel like there's a better way to solve this
+    # I'm just happy I finally found the solution
     if (data == None): data = load_input_data()
     
     lines = data.splitlines()
@@ -48,31 +48,35 @@ def solve_a(data=None):
             dir = dir[l]
         return dir
 
-    num_dirs = 0
+
+    lines = list(filter(lambda x: (not x == "$ ls") and (not x.startswith("dir")), lines))
+
+    # Preprocess the lines by giving each file and folder
+    # unique ids
+    for i, line in enumerate(lines[:]):
+        if line == "$ cd ..": continue
+        if line.startswith("$ cd"): 
+            lines[i] = lines[i] + f"_d{i}"
+        else: 
+            lines[i] = lines[i] + f"_f{i}"
+    
+    
+
     for line in lines[1:]:
-        if line == "$ ls": continue
         if line.startswith("$ cd"):
-            dirname = line.split()[-1]
+            dirname = line.split()[-1] 
 
             if dirname == "..": path.pop()
             else:
                 path.append(dirname)
-                if not cur_dir.get(dirname): 
+
+                # Check if dirname is not file
+                if not type(cur_dir.get(dirname)) == dict:
                     cur_dir[dirname] = {}
                     dir_sizes[dirname] = 0
             
             # Load the current directory
             cur_dir = load_dir(path)
-
-        elif line.startswith("dir"):
-            # Process subdirectory
-            dirname = line.split()[-1]
-
-            if not dir_sizes.get(dirname): dir_sizes[dirname] = 0
-            if not cur_dir.get(dirname): 
-                cur_dir[dirname] = {}
-                
-            num_dirs +=1
         
         else:
             # Process files
@@ -83,25 +87,18 @@ def solve_a(data=None):
             for dir in path: dir_sizes[dir] += int(size)
         
 
-    pprint(dir_sizes)
     # Sum all directories < 100,000
     sum_sizes = 0
     for _, size in dir_sizes.items():
         if size <= 100_000: sum_sizes += size
 
-    print(num_dirs, len(dir_sizes.keys()))
     return sum_sizes
 
 
 example_data = load_example_data()
 
+assert solve_a(example_data) == 95437
 
+puzzle.answer_a = solve_a()
 
-
-
-# assert solve_a(example_data) == 95437
-
-# puzzle.answer_a = solve_a() 1038055
-
-solve_a()
 
