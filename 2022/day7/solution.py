@@ -60,7 +60,6 @@ def solve_a(data=None):
         else: 
             lines[i] = lines[i] + f"_f{i}"
     
-    
 
     for line in lines[1:]:
         if line.startswith("$ cd"):
@@ -92,13 +91,35 @@ def solve_a(data=None):
     for _, size in dir_sizes.items():
         if size <= 100_000: sum_sizes += size
 
-    return sum_sizes
+    return sum_sizes, dir_sizes
+
+
+def solve_b(dir_sizes):
+    total_size = 70000000
+
+    used_space = dir_sizes["/"]
+    free_space = total_size - used_space
+
+    space_needed = 30000000 - free_space
+
+    for size in sorted(dir_sizes.values()):
+        if size >= space_needed:
+            return size
+    
+
+
 
 
 example_data = load_example_data()
-
 assert solve_a(example_data) == 95437
 
-puzzle.answer_a = solve_a()
+
+puzzle.answer_a, dir_sizes = solve_a()
+puzzle.answer_b = solve_b(dir_sizes)
 
 
+# NOTE: This is a note to future self. 
+# Refactore the code to first create the 
+# directory structure and then calculate dir_sizes.
+# As a tip you can add a `size: int` and `computed: boolean` field
+# PS: Make sure the assertion does not fail.
