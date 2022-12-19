@@ -26,47 +26,44 @@ def solve_a(data=None):
 
     grid_len = len(forest_grid[0])
 
-    from pprint import pprint
-
-    # Check from LEFT to RIGHT
-    for y, row in enumerate(forest_grid):
-        tallest = -1
-        for x, height in enumerate(row):
-            if height > tallest:
-                tallest = int(height)
-                if not visible_grid[y][x]: visible_grid[y][x] = True
-
-
-    # Check from RIGHT to LEFT
-    for y, row in enumerate(forest_grid):
-        tallest = -1
-        for x, height in enumerate(reversed(row)):
-            if height > tallest:
-                tallest = int(height)
-                if not visible_grid[y][grid_len-x-1]: visible_grid[y][grid_len-x-1] = True
-
-    # Check from TOP to BOTTOM
+    # Solve the grid in every direction
     for x in range(grid_len):
-        tallest = -1
+        tallest_top = -1
+        tallest_right = -1
+        tallest_bottom = -1
+        tallest_left = -1
         for y in range(grid_len):
-            height = forest_grid[y][x]
-            if height > tallest:
-                tallest = int(height)
+            height_top = forest_grid[y][x]
+            height_right = forest_grid[x][grid_len-y-1]
+            height_bottom = forest_grid[grid_len-y-1][x]
+            height_left = forest_grid[x][y]
+            if height_top > tallest_top:
+                tallest_top = int(height_top)
                 if not visible_grid[y][x]: visible_grid[y][x] = True
+            if height_bottom > tallest_bottom:
+                tallest_bottom = int(height_bottom)
+                if not visible_grid[grid_len-y-1][x]:
+                    visible_grid[grid_len-y-1][x] = True
+            if height_left > tallest_left:
+                tallest_left = int(height_left)
+                if not visible_grid[x][y]:
+                    visible_grid[x][y] = True
+            if height_right > tallest_right:
+                tallest_right = int(height_right)
+                if not visible_grid[x][grid_len-y-1]:
+                    visible_grid[x][grid_len-y-1] = True
 
-    
-    # Check from BOTTOM to TOP
-    for x in range(grid_len):
-        tallest = -1
-        for y in range(grid_len):
-            height = forest_grid[grid_len-y-1][x]
-            if height > tallest:
-                tallest = int(height)
-                if not visible_grid[grid_len-y-1][x]: visible_grid[grid_len-y-1][x] = True
                 
-    pprint(forest_grid)
-    pprint(visible_grid)
+    
 
+    # Sum all True elements in the grid
+    visible_trees = 0
+    for _ in visible_grid:
+        for t in _:
+            if t: visible_trees += 1
+    
+    print(visible_trees)
+    return visible_trees
 
 # Example data
 data = \
@@ -77,4 +74,6 @@ data = \
 35390
 """
 
-solve_a(data)
+# assert solve_a(data) == 21
+
+puzzle.answer_a = solve_a()
