@@ -65,6 +65,78 @@ def solve_a(data=None):
     print(visible_trees)
     return visible_trees
 
+
+def solve_b(data=None):
+    if data == None: data = load_input_data()
+
+    grid = [ [int(t) for t in row] for row in data.splitlines()]
+    grid_len = len(grid)
+
+    max_scenic_score = 0
+
+    def scenic_score(grid, pos_y, pos_x):
+        # Viewing distances in all directions
+        top = 0
+        bottom = 0
+        left = 0
+        right = 0
+        
+        val = grid[pos_y][pos_x]
+
+        # Check above the tree
+        for i in range(1, grid_len):
+            # Check if you're off the grid
+            if pos_y - i < 0: break
+
+            top += 1
+            comp = grid[pos_y - i][pos_x]
+
+            if comp >= val: break
+
+        # Check below the tree
+        for i in range(1, grid_len):
+            # Check if you're off the grid
+            if pos_y + i == grid_len: break
+
+            bottom += 1
+            comp = grid[pos_y + i][pos_x]
+
+            if comp >= val: break
+            
+
+        # Check to the left of the tree
+        for i in range(1, grid_len):
+            # Check if you're off the grid
+            if pos_x - i < 0: break
+
+            left += 1
+            comp = grid[pos_y][pos_x - i]
+
+            if comp >= val: break
+        
+        # Check to the right of the tree
+        for i in range(1, grid_len):
+            # Check if you're off the grid
+            if pos_x + i == grid_len: break
+
+            right += 1
+            comp = grid[pos_y][pos_x + i]
+
+            if comp >= val: break
+
+        return top * bottom * left * right
+
+    # Find the max of all scenic scores
+    for y in range(grid_len):
+        for x in range(grid_len):
+            score = scenic_score(grid, y, x)
+            if  score > max_scenic_score: max_scenic_score = score
+
+
+    return max_scenic_score
+
+
+
 # Example data
 data = \
 """30373
@@ -74,6 +146,8 @@ data = \
 35390
 """
 
-# assert solve_a(data) == 21
+assert solve_a(data) == 21
+assert solve_b(data) == 8
 
 puzzle.answer_a = solve_a()
+puzzle.answer_b = solve_b()
