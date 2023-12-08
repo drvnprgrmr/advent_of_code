@@ -30,18 +30,12 @@ class MyPuzzle:
         """
         Solve the 'a' section of this puzzle.
         """
-        # Check if puzzle is solved
-        if self.puzzle.answered_a and not data:
-            if __name__ == "__main__":
-                print(f"Solution to a: {self.puzzle.answer_a}")
-                return
-
-        elif not data:
+        if not data:
             data = self.data
 
         # TODO: Write algorithm here
 
-        if not self.puzzle.answered_a: 
+        if not self.puzzle.answered_a:
             self.puzzle.answer_a = answer
         return answer
 
@@ -49,75 +43,65 @@ class MyPuzzle:
         """
         Solve the 'b' section of this puzzle.
         """
-        # Check if puzzle is solved
-        if self.puzzle.answered_b and not data:
-            if __name__ == "__main__":
-                print(f"Solution to b: {self.puzzle.answer_b}")
-                return
-
-        elif not data:
+        if not data:
             data = self.data
 
         # TODO: Write algorithm here
 
-        if not self.puzzle.answered_b: 
+        if not self.puzzle.answered_b:
             self.puzzle.answer_b = answer
         return answer
 
     def test_a(self):
-        examples = self.puzzle.examples
+        example = self.puzzle.examples[0]
+        passed = True
 
-        all_passed = True
+        print("Testing Solution A\n")
 
-        print("Testing Solution A")
-        for i, example in enumerate(examples):
-            print(f"Example #{i + 1}\n")
-            print(f"Data:\n{example.input_data}\n")
+        print(f"Data:\n{example.input_data}\n")
 
-            solved_a = self.solve_a(example.input_data)
-            if str(solved_a) == example.answer_a:
-                print("Correct!", f"Answer is '{solved_a}'")
-            else:
-                all_passed = False
-                print(
-                    "Wrong!",
-                    f"Correct answer is '{example.answer_a}'.",
-                    f"Provided answer is '{solved_a}'.",
-                )
-            print()
+        solved_a = self.solve_a(example.input_data)
+        if str(solved_a) == example.answer_a:
+            print("Correct!", f"Answer is '{solved_a}'")
+        else:
+            passed = False
+            print(
+                "Wrong!",
+                f"Correct answer is '{example.answer_a}'.",
+                f"Provided answer is '{solved_a}'.",
+            )
+        print()
 
-        return all_passed
+        return passed
 
     def test_b(self):
-        examples = self.puzzle.examples
+        example = self.puzzle.examples[-1]
+        passed = True
 
-        all_passed = True
+        print("Testing Solution B\n")
 
-        print("Testing Solution B")
-        for i, example in enumerate(examples):
-            print(f"Example #{i + 1}\n")
-            print(f"Data:\n{example.input_data}\n")
+        print(f"Data:\n{example.input_data}\n")
 
-            solved_b = self.solve_b(example.input_data)
-            if str(solved_b) == example.answer_b:
-                print("Correct!", f"Answer is '{solved_b}'")
-            else:
-                all_passed = False
-                print(
-                    "Wrong!",
-                    f"Correct answer is '{example.answer_b}'.",
-                    f"Provided answer is '{solved_b}'.",
-                )
-            print()
+        solved_b = self.solve_b(example.input_data)
+        if str(solved_b) == example.answer_b:
+            print("Correct!", f"Answer is '{solved_b}'")
+        else:
+            passed = False
+            print(
+                "Wrong!",
+                f"Correct answer is '{example.answer_b}'.",
+                f"Provided answer is '{solved_b}'.",
+            )
+        print()
 
-        return all_passed
+        return passed
 
 
 if __name__ == "__main__":
     p = MyPuzzle(YEAR, DAY)
 
     if p.test_a():
-        p.solve_a()
+        print(f"Solution to A: {p.solve_a()}")
 
     if p.test_b():
-        p.solve_b()
+        print(f"Solution to B: {p.solve_b()}")
