@@ -3,7 +3,8 @@ from os import path
 
 # Set the year and day for this puzzle
 YEAR = 0  # Change this to the current puzzle year
-DAY = 0   # Change this to the current puzzle day
+DAY = 0  # Change this to the current puzzle day
+
 
 class MyPuzzle:
     def __init__(self, year: int, day: int):
@@ -30,56 +31,75 @@ class MyPuzzle:
         Solve the 'a' section of this puzzle.
         """
         # Check if puzzle is solved
-        if self.puzzle.answered_a:
+        if self.puzzle.answered_a and not data:
             if __name__ == "__main__":
                 print(f"Solution to a: {self.puzzle.answer_a}")
+                return
 
-        if not data:
+        elif not data:
             data = self.data
 
         # TODO: Write algorithm here
+
+        if not self.puzzle.answered_a: 
+            self.puzzle.answer_a = answer
+        return answer
 
     def solve_b(self, data=None):
         """
         Solve the 'b' section of this puzzle.
         """
         # Check if puzzle is solved
-        if self.puzzle.answered_a:
+        if self.puzzle.answered_b and not data:
             if __name__ == "__main__":
-                print(f"Solution to a: {self.puzzle.answer_a}")
+                print(f"Solution to b: {self.puzzle.answer_b}")
+                return
 
-        if not data:
+        elif not data:
             data = self.data
 
         # TODO: Write algorithm here
 
-    def test(self):
+        if not self.puzzle.answered_b: 
+            self.puzzle.answer_b = answer
+        return answer
+
+    def test_a(self):
         examples = self.puzzle.examples
 
         all_passed = True
 
+        print("Testing Solution A")
         for i, example in enumerate(examples):
-            print(f"Testing Example #{i + 1}\n")
+            print(f"Example #{i + 1}\n")
             print(f"Data:\n{example.input_data}\n")
 
-            # Test solution a
-            print("Testing Solution A")
-            solved_b = self.solve_a(example.input_data)
-            if solved_b == example.answer_a:
-                print("Correct!", f"Answer is '{solved_b}'")
+            solved_a = self.solve_a(example.input_data)
+            if str(solved_a) == example.answer_a:
+                print("Correct!", f"Answer is '{solved_a}'")
             else:
                 all_passed = False
                 print(
                     "Wrong!",
                     f"Correct answer is '{example.answer_a}'.",
-                    f"Provided answer is '{solved_b}'.",
+                    f"Provided answer is '{solved_a}'.",
                 )
             print()
 
-            # Test solution b
-            print("Testing Solution B")
+        return all_passed
+
+    def test_b(self):
+        examples = self.puzzle.examples
+
+        all_passed = True
+
+        print("Testing Solution B")
+        for i, example in enumerate(examples):
+            print(f"Example #{i + 1}\n")
+            print(f"Data:\n{example.input_data}\n")
+
             solved_b = self.solve_b(example.input_data)
-            if solved_b == example.answer_b:
+            if str(solved_b) == example.answer_b:
                 print("Correct!", f"Answer is '{solved_b}'")
             else:
                 all_passed = False
@@ -92,11 +112,12 @@ class MyPuzzle:
 
         return all_passed
 
+
 if __name__ == "__main__":
     p = MyPuzzle(YEAR, DAY)
 
-    # If the test passes solve current day's challenge
-    if p.test():
-        p.solve_a()
+    if p.test_a():
         p.solve_a()
 
+    if p.test_b():
+        p.solve_b()
