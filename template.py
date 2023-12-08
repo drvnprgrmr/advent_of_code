@@ -35,7 +35,7 @@ class MyPuzzle:
 
         # TODO: Write algorithm here
 
-        if not self.puzzle.answered_a:
+        if not self.puzzle.answered_a and not data:
             self.puzzle.answer_a = answer
         return answer
 
@@ -48,7 +48,7 @@ class MyPuzzle:
 
         # TODO: Write algorithm here
 
-        if not self.puzzle.answered_b:
+        if not self.puzzle.answered_b and not data:
             self.puzzle.answer_b = answer
         return answer
 
