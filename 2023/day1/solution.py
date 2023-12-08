@@ -5,6 +5,7 @@ from os import path
 YEAR = 2023
 DAY = 1
 
+
 class MyPuzzle:
     def __init__(self, year: int, day: int):
         self.puzzle = Puzzle(year, day)
@@ -29,74 +30,122 @@ class MyPuzzle:
         """
         Solve the 'a' section of this puzzle.
         """
-        # Check if puzzle is solved
-        if self.puzzle.answered_a:
-            if __name__ == "__main__":
-                print(f"Solution to a: {self.puzzle.answer_a}")
-
         if not data:
             data = self.data
 
-        # TODO: Write algorithm here
+        lines = data.splitlines()
+        calibration_value = 0
+
+        for line in lines:
+            # Find first digit
+            for char in line:
+                if char.isdigit():
+                    first_digit = char
+                    break
+            # Find last digit
+            for char in reversed(line):
+                if char.isdigit():
+                    last_digit = char
+                    break
+
+            calibration_value += int(first_digit + last_digit)
+
+        if not self.puzzle.answered_a and not data:
+            self.puzzle.answer_a = calibration_value
+        return calibration_value
 
     def solve_b(self, data=None):
         """
         Solve the 'b' section of this puzzle.
         """
-        # Check if puzzle is solved
-        if self.puzzle.answered_a:
-            if __name__ == "__main__":
-                print(f"Solution to a: {self.puzzle.answer_a}")
-
         if not data:
             data = self.data
 
-        # TODO: Write algorithm here
+        spelling_to_digit = {
+            "one": "1",
+            "two": "2",
+            "three": "3",
+            "four": "4",
+            "five": "5",
+            "six": "6",
+            "seven": "7",
+            "eight": "8",
+            "nine": "9"
+        }
+        lines = data.splitlines()
+        calibration_value = 0
 
-    def test(self):
-        examples = self.puzzle.examples
+        for line in lines:
+            digits = []
+            spelled_out = []
+            for char in line:
+                spelled_out.append(char)
 
-        all_passed = True
+                for spelling in spelling_to_digit.keys():
+                    if spelling in "".join(spelled_out):
+                        digits.append(spelling_to_digit[spelling])
+                        spelled_out.clear()
 
-        for i, example in enumerate(examples):
-            print(f"Testing Example #{i + 1}\n")
-            print(f"Data:\n{example.input_data}\n")
+                if char.isdigit():
+                    digits.append(char)
+                    spelled_out.clear()
+            calibration_value += int(digits[0] + digits[-1])
 
-            # Test solution a
-            print("Testing Solution A")
-            solved_b = self.solve_a(example.input_data)
-            if solved_b == example.answer_a:
-                print("Correct!", f"Answer is '{solved_b}'")
-            else:
-                all_passed = False
-                print(
-                    "Wrong!",
-                    f"Correct answer is '{example.answer_a}'.",
-                    f"Provided answer is '{solved_b}'.",
-                )
-            print()
+        if not self.puzzle.answered_b and not data:
+            self.puzzle.answer_b = calibration_value
+        print(calibration_value)
+        return calibration_value
 
-            # Test solution b
-            print("Testing Solution B")
-            solved_b = self.solve_b(example.input_data)
-            if solved_b == example.answer_b:
-                print("Correct!", f"Answer is '{solved_b}'")
-            else:
-                all_passed = False
-                print(
-                    "Wrong!",
-                    f"Correct answer is '{example.answer_b}'.",
-                    f"Provided answer is '{solved_b}'.",
-                )
-            print()
+    def test_a(self):
+        example = self.puzzle.examples[0]
+        passed = True
 
-        return all_passed
+        print("Testing Solution A\n")
+
+        print(f"Data:\n{example.input_data}\n")
+
+        solved_a = self.solve_a(example.input_data)
+        if str(solved_a) == example.answer_a:
+            print("Correct!", f"Answer is '{solved_a}'")
+        else:
+            passed = False
+            print(
+                "Wrong!",
+                f"Correct answer is '{example.answer_a}'.",
+                f"Provided answer is '{solved_a}'.",
+            )
+        print()
+
+        return passed
+
+    def test_b(self):
+        example = self.puzzle.examples[-1]
+        passed = True
+
+        print("Testing Solution B\n")
+
+        print(f"Data:\n{example.input_data}\n")
+
+        solved_b = self.solve_b(example.input_data)
+        if str(solved_b) == example.answer_b:
+            print("Correct!", f"Answer is '{solved_b}'")
+        else:
+            passed = False
+            print(
+                "Wrong!",
+                f"Correct answer is '{example.answer_b}'.",
+                f"Provided answer is '{solved_b}'.",
+            )
+        print()
+
+        return passed
+
 
 if __name__ == "__main__":
     p = MyPuzzle(YEAR, DAY)
 
-    # If the test passes solve current day's challenge
-    if p.test():
-        p.solve_a()
+    if p.test_a():
         p.solve_a()
 
+    if p.test_b():
+        p.solve_b()
