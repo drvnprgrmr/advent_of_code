@@ -2,8 +2,8 @@ from aocd.models import Puzzle
 from os import path
 
 # Set the year and day for this puzzle
-YEAR = 2023
-DAY = 1
+YEAR = 0  # Change this to the current puzzle year
+DAY = 0   # Change this to the current puzzle day
 
 class MyPuzzle:
     def __init__(self, year: int, day: int):
